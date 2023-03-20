@@ -33,7 +33,6 @@ body{
   height: 80px;
   width: 170px;
   z-index: 1000;
-  white-space: pre-wrap;
 }
 
 svg{
@@ -44,8 +43,8 @@ svg{
 
 #legend {
   position: fixed;
-  bottom: 5%;
-  left: 5%;
+  top: 10%;
+  right: 5%;
   z-index: 1000;
   width: 300px;
   height: 50px;
@@ -108,8 +107,6 @@ let svg = d3.select("svg")
 // Load external data and boot
 Promise.all([d3.json("https://raw.githubusercontent.com/rpxj/HASS-assignment4/main/sgmap.json"), d3.csv("https://raw.githubusercontent.com/rpxj/HASS-assignment4/main/population2022.csv")]).then(data => {
 
-        //console.log(data[0]);
-        //console.log(data[1]);
         let mapFeatures =[];
         data[0].features.forEach(d => {
             let result = data[1].find( e => { return e["Subzone"].toUpperCase() == d.properties["Subzone Name"].toUpperCase(); })
@@ -152,9 +149,14 @@ svg.append("g")
                         .text(d.properties["Subzone Name"])
                         .append("p")
                         .text('Population: ' + d.Population)
-                        .style("left", (event.pageX) + "px")
-                        .style("top", (event.pageY) + "px")
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 30) + "px")
                          })
+        .on("mousemove", (event) => {
+                    d3.select(".tooltip")
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 30) + "px")
+                        })
         .on("mouseout", (event, d) => {
                         d3.select(event.currentTarget)
                         .style('stroke', "white")
